@@ -1,0 +1,73 @@
+<div>
+  <h2>Publication Network</h2>
+  <p class="subhead">
+    In this section, we will demonstrate another data analysis technique used in the social sciences and digital humanities: network analysis. Many structures of interest to researchers in these fields can be understood as networks of individuals, documents, or other entities. Here, we will create and analyze a publication network by linking composers based on the documents from which the pieces in our dataset are taken. Each piece in the dataset comes with a source document and, if known, a composer. Using this information, we can compile a list of documents for each composer that contain at least one of their pieces. For example, below you see the documents  that include compositions by Hans Newsidler, Francesco da Milano, John Dowland and Nicolas Vallet.
+  </p>
+  <div class="plot" data-plot-url="document_stripplot.json"></div>
+  <p>
+    Many sources contain works by multiple composers. For example, the document labeled with the library shelf number <i>ms res. 429</i> is a manuscript titled <a href="https://gallica.bnf.fr/ark:/12148/btv1b52516407c/f1.item" target="_blank">Italianische Tabulatura auf die Lauthen Von der Hand geschrieben Allerley Sänge Zusamen gebracht</a>. This manuscript includes pieces by various Italian and South German composers, several of which are marked with the name “Francesco Milanese.” Although Newsidler is not explicitly mentioned in the source, our dataset attributes two anonymous pieces in the manuscript to him. This attribution is likely due to Gerbode, who identified one of the pieces (shown below) as “Der Bethler Tantz,” originally published in Newsidler's 1540 <a href="https://opendata2.uni-halle.de/explore?bitstream_id=e5ee7cec-ca82-475f-84c9-757b14c09adb&handle=1516514412012/7505&provider=iiif-image" target="_blank">Ein newes Lautenbüchlein</a>. This seems plausible, given that the manuscript also contains pieces by Hans Gerle, a contemporary of Newsidler who, like the latter, lived and worked in Nuremberg.</p>
+  <div class="image-container">
+    <img src="images/general/bethler_tantz.png" alt="Piece in Italian lute tablature. Presumably Hans Newsider's Bethler Tantz"/>
+  </div>
+  <p>
+    The document thus establishes a connection between da Milano and Newsidler in our publication network. Newsidler and John Dowland, for instance, would not be directly connected, as they do not share any common documents, as shown above.
+  </p>
+
+  <p class="section-break">* * *</p>
+
+  <p>
+    For creating and analyzing the network, I used the Python library <a href="https://networkx.org" target="_blank">NetworkX</a>, which offers a variety of useful algorithms. I have focused on the more important composers and documents–otherwise the network becomes difficult to present and we get a lot of obscure composers for whom we have no further data. However, rerunning the analysis with all composers and sources in the dataset does not significantly change the results.
+  </p>
+  <div class="plot" id="network" data-plot-url="network_graph_nationality.json" style="width: 100%"></div>
+  <div style="display: flex; justify-content: left; gap: 15px">
+    <button class="section-button" onclick="loadNetworkPlot('network_graph_nationality')">Nationality</button>
+    <button class="section-button" onclick="loadNetworkPlot('network_graph_date')">Active Year</button>
+    <button class="section-button" onclick="loadNetworkPlot('network_graph_community')">Community</button>
+  </div>
+  <p>
+    The node positions in the visualization are determined by a physics-inspired <a href="https://networkx.org/documentation/stable/reference/generated/networkx.drawing.layout.spring_layout.html" target="_blank">algorithm</a> that treats nodes as repelling objects and edges as springs, holding the nodes together. Node size reflects the number of compositions the composers have in our dataset. The colors represent composer attributes. You can choose between displaying nationality, active year, and communities determined by a clustering algorithm. More on that later.</p>
+  <p>
+    If you display the different attributes, you will recognize some patterns. Most obviously, the English composers are clustered together and the upper half of the network seems to be occupied by earlier composers. There appears to be some structure to the network that we can describe.
+  </p>
+
+  <p class="section-break">* * *</p>
+
+  <p>
+    A natural question is which nodes are the most central or influential. There are several <a href="https://academic.oup.com/book/27303" target="_blank">measures</a> designed for quantifying the degree of centrality, the simplest one being the degree, i.e. the number of direct connections. In our network, these measures correlate almost perfectly, with the exception of betweenness centrality which has a Pearson correlation coefficient of only 0.68 with degree. Betweenness centrality measures a node’s influence by counting how many shortest paths between nodes go through it. Thus, a node with relatively few connections can still have high betweenness centrality if it acts as a bridge between otherwise poorly connected clusters.
+  </p>
+  <p>
+    An interesting observation about the top composers for the different centrality measures is that they are almost exclusively dedicated lutenists. Among the top individuals by betweenness centrality, however, are composers such as Claudin de Sermisy and Orlando di Lasso who were not lutenists themselves, but whose music has been adapted for the lute. This suggests a difference in how their music was published. Their pieces may have been included in more diverse collections, or adapted and published across different countries or over an extended period, thus connecting distinct parts of the network. Think of Josquin Des Prez’ superhit “Mille Regretz”, which was adapted all over Europe—by German composers like Gerle and Newsidler, the Spanish vihuela player Luis de Narváez, and in Flemish publications by Pierre Phalese. This is a strong interpretation for such a minor finding, but if it were to be corroborated, it would illustrate the role adaptations and intabulations played in connecting different parts of the Renaissance lute music landscape.
+  </p>
+
+  <p class="section-break">* * *</p>
+
+  <p>
+    We can also ask what factors make composers in our network more likely to be connected. In many networks, nodes tend to connect based on similarity, a phenomenon called homophily or assortative mixing. For our composers, the two key features with respect to which the network could exhibit homophily are nationality and active year. Intuitively, composers from the same country or time period are more likely to be published together, and thus connected in our network.
+  </p>
+  <div class="plot" data-plot-url="assortativity_plots.json" style="width: 97%"></div>
+  <p>
+    To measure assortative mixing for nationality (a discrete attribute), we calculate modularity, which compares the observed fraction of edges within nationality groups to what would be expected in a random network. The mixing matrix on the left shows the observed and (upon mouse hover) expected fractions, with the diagonal cells representing connections within the same nationality. Since the observed fractions exceed the expected ones on the diagonal, we observe positive assortative mixing, although the normalized modularity coefficient of 0.076 is close to 0.
+  </p>
+  <p>
+    For active year (a numeric attribute), we assess whether composers connect to others with similar years of activity. The figure on the right shows the distribution of the differences between the active years of connected composers, with blue for real data and red for a simulated random network. The observed distribution is more concentrated near zero, suggesting homophily. The assortativity coefficient of 0.315 (a type of correlation) indicates moderate assortative mixing based on active year.
+  </p>
+
+  <p class="section-break">* * *</p>
+
+  <p>
+    So far, we have focused on individual nodes by examining their positions in the network and their tendency to connect to other nodes based on certain attributes. But network structure can also be described from a more birds-eye point of view, for instance, by identifying densely connected clusters or communities. The clustering you can display in the network visualization above has been determined by an <a href="https://networkx.org/documentation/stable/reference/algorithms/generated/networkx.algorithms.community.louvain.louvain_communities.html#networkx.algorithms.community.louvain.louvain_communities" target="_blank">algorithm</a> that aims to divide the network into groups that maximize modularity.
+  </p>
+  <div class="plot" data-plot-url="network_communities.json" style="width: 97%"></div>
+  <p>
+    The groups detected by the algorithm don’t correspond as obviously to natural communities as groups we might get by running the same algorithm on a social network based on, say, social media data. But as shown above, they do have some relationships to the attributes of the composers. For example, Group 3 consists primarily of earlier composers and is of mixed nationalities. The other two groups mostly consist of later composers, with Group 1 separating the English composers from those in Group 2, which includes composers from other regions.
+  </p>
+
+  <p class="section-break">* * *</p>
+
+  <p>
+    A takeaway from the assortativity analysis and community detection is that nationality has surprisingly little influence on which composers are published together. This is likely due to the many publications that feature an international collection of compositions. The notable exception is a cluster of English lutenists, which is explained by the boom in lute music England experienced during the late 16th and early 17th century when it presumably developed its own publishing industry.
+  </p>
+  <p>
+    While a composer’s active period appears to have more influence on the network structure, its effect is still moderate. If we examine the duration over which individual composers were published, we observe a sharp drop at around 40 years. This seems to represent the maximum time span for composers who were not published for long after their active careers had ended. Only a few composers had their works published over longer periods, such as Francesco da Milano, whose music continued to be published for nearly 90 years, as shown in an earlier chart. These composers bridge the network across the temporal dimension.
+  </p>
+</div>

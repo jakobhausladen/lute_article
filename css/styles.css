@@ -1,0 +1,240 @@
+/* Site structure */
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  background-color: white;
+}
+.main-column {
+  max-width: 750px;
+}
+
+.left-column {
+  flex: 1;
+}
+.right-column {
+  flex: 1;
+}
+
+/* Main column content */
+
+.chapter {
+  margin: 150px 0px;
+  padding: 0px 50px;
+  min-height: 1200px;
+  color: rgb(44, 44, 47);
+}
+.loading {
+  text-align: center;
+  font-size: 1.2em;
+  color: grey;
+}
+.chapter h1 {
+  font-size: 70px;
+  margin-bottom: 100px;
+  text-align: center;
+}
+.chapter h2 {
+  font-size: 55px;
+  margin-top: 0px;
+  margin-bottom: 60px;
+}
+.chapter p {
+  font-family: "PT Serif", serif;
+  font-size: 18px;
+  line-height: 1.6;
+  letter-spacing: 0.5px;
+  margin: 40px 0px;
+}
+.chapter ul {
+  font-family: "PT Serif", serif;
+  font-size: 18px;
+  line-height: 1.6;
+  letter-spacing: 0.5px;
+  margin: 0px 0px;
+}
+.subhead::first-letter {
+  initial-letter: 3;
+  padding-right: 15px;
+}
+.section-break{
+  user-select: none;
+  text-align: center;
+  font-size: 30px;
+}
+.plot {
+  margin: 40px 0px;
+  width: 90%;
+}
+.header {
+  display: flex;
+  justify-content: center;
+}
+.header img {
+  width: 95%;
+}
+.image-container {
+  display: flex;
+  justify-content: left;
+  margin: 40px 0px;
+}
+.image-container img {
+  width: 80%;
+}
+a {
+  color: #0073d0;
+  text-decoration: none;
+}
+a:visited {
+  color:#0073d0;
+  text-decoration: none;
+}
+.section-button {
+  margin-top: 15px;
+  background-color: white;
+  color: rgb(43, 43, 43);
+  border: 1.5px solid rgb(44, 44, 47);
+  border-radius: 0px;
+  padding: 8px 14px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 0px 2px;
+  cursor: pointer;
+  transition: background-color 0.1;
+}
+.section-button:hover {
+  background-color:rgb(250, 250, 250);
+}
+.section-button:active {
+  background-color: rgb(245, 245, 245);
+}
+
+/* Lutenist play buttons */
+
+.play-button-container {
+  display: flex;
+  justify-content: right;
+}
+.play-button {
+  background: none;
+  border: none;
+  margin-right: 70px;
+  cursor: pointer;
+}
+.pauseIcon {
+  display: none;
+}
+.sticky {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 50px;
+}
+
+/* jQCloud CSS */
+
+#word-cloud {
+  width: 650px;
+  height: 450px;
+  border: none;
+  margin: 0px auto;
+  padding-bottom: 15px;
+}
+div.jqcloud {
+  font-size: 10px;
+  line-height: normal;
+}
+
+div.jqcloud a {
+  font-size: inherit;
+  text-decoration: none;
+}
+
+div.jqcloud span.w10 {
+  font-size: 550%;
+}
+div.jqcloud span.w9 {
+  font-size: 500%;
+}
+div.jqcloud span.w8 {
+  font-size: 450%;
+}
+div.jqcloud span.w7 {
+  font-size: 400%;
+}
+div.jqcloud span.w6 {
+  font-size: 350%;
+}
+div.jqcloud span.w5 {
+  font-size: 300%;
+}
+div.jqcloud span.w4 {
+  font-size: 250%;
+}
+div.jqcloud span.w3 {
+  font-size: 200%;
+}
+div.jqcloud span.w2 {
+  font-size: 150%;
+}
+div.jqcloud span.w1 {
+  font-size: 100%;
+}
+
+div.jqcloud {
+  color: #2ba0fd;
+}
+div.jqcloud span.w10 {
+  color: #3d5a68;
+}
+div.jqcloud span.w9 {
+  color: #563225;
+}
+div.jqcloud span.w8 {
+  color: #dc7500;
+}
+div.jqcloud span.w7 {
+  color: #298c2d;
+}
+div.jqcloud span.w6 {
+  color: #0073d0;
+}
+div.jqcloud span.w5 {
+  color: #1c2e92;
+}
+div.jqcloud span.w4 {
+  color: #441794;
+}
+div.jqcloud span.w3 {
+  color: #79048d;
+}
+div.jqcloud span.w2 {
+  color: #c60040;
+}
+div.jqcloud span.w1 {
+  color: #d12013;
+}
+div.jqcloud span:hover {
+  color: #0099b2;
+}
+
+div.jqcloud {
+  overflow: hidden;
+  position: relative;
+  margin: 20px auto;
+}
+
+div.jqcloud span {
+  padding: 0;
+}
+
+/* Hide right column for small screens */
+
+@media (max-width: 950px) {
+  .right-column {
+    display: none;
+  }
+}

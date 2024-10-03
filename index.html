@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lute Music Analysis</title>
+    <link rel="stylesheet" href="css/styles.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=PT+Serif&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.plot.ly/plotly-2.11.1.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jqcloud/1.0.4/jqcloud.min.js"
+      integrity="sha512-kKFIFIYZ70cs9AxqGnLqwhm1t0DI3vwiIGGe2r0zulHVgpDYvW3QZuIqsFzgbqmEsq1no2YCBJ7O99t8kmVu2A=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script src="js/loadChapters.js"></script>
+    <script src="js/playButtons.js"></script>
+    <script src="js/stickyButtons.js"></script>
+    <script src="js/switchNetworks.js"></script>
+    <script src="js/wordcloud.js"></script>
+  </head>
+  <body>
+    <div class="left-column">
+      <div style="height: 1200px"></div>
+      <div class="play-button-container" id="button_1">
+        <button class="play-button" data-music="audio/mille_regres.mp3">
+          <img src="images/lutenist_buttons/lutenist_1.png" alt="Woodcut of lutenist as play button" class="playIcon" style="height: 170px"/>
+          <img src="images/lutenist_buttons/lutenist_1.gif" alt="Woodcut of lutenist (animated gif)" class="pauseIcon" style="height: 170px"/>
+          <audio class="music" preload="auto"></audio>
+        </button>
+      </div>
+
+      <div style="height: 5500px"></div>
+      <div class="play-button-container">
+        <button class="play-button" data-music="audio/une_jeune_fillette.mp3">
+          <img src="images/lutenist_buttons/lutenist_2.png" alt="Woodcut of lutenist as play button" class="playIcon" style="height: 210px"/>
+          <img src="images/lutenist_buttons/lutenist_2.gif" alt="Woodcut of lutenist (animated gif)" class="pauseIcon" style="height: 210px"/>
+          <audio class="music" preload="auto"></audio>
+        </button>
+      </div>
+
+      <div style="height: 5750px"></div>
+      <div class="play-button-container">
+        <button class="play-button" data-music="audio/ein_gut_preambel.mp3">
+          <img src="images/lutenist_buttons/lutenist_3.png" alt="Woodcut of lutenist as play button" class="playIcon"  style="height: 230px"/>
+          <img src="images/lutenist_buttons/lutenist_3.gif" alt="Woodcut of lutenist (animated gif)" class="pauseIcon" style="height: 230px"/>
+          <audio class="music" preload="auto"></audio>
+        </button>
+      </div>
+
+      <div style="height: 5100px"></div>
+      <div class="play-button-container">
+        <button class="play-button" data-music="audio/now_o_now.mp3">
+          <img src="images/lutenist_buttons/lutenist_4.png" alt="Woodcut of lutenist as play button" class="playIcon" style="height: 230px"/>
+          <img src="images/lutenist_buttons/lutenist_4.gif" alt="Woodcut of lutenist (animated gif)" class="pauseIcon" style="height: 230px"/>
+          <audio class="music" preload="auto"></audio>
+        </button>
+      </div>
+
+      <div style="height: 3650px"></div>
+      <div class="play-button-container">
+        <button class="play-button" data-music="audio/der_bethler_tantz.mp3">
+          <img src="images/lutenist_buttons/lutenist_5.png" alt="Woodcut of lutenist as play button" class="playIcon" style="height: 210px"/>
+          <img src="images/lutenist_buttons/lutenist_5.gif" alt="Woodcut of lutenist (animated gif)" class="pauseIcon" style="height: 210px"/>
+          <audio class="music" preload="auto"></audio>
+        </button>
+      </div>
+    </div>
+
+    <div class="main-column">
+      <div class="main-element"></div>
+      <div class="container" id="chapters-container">
+        <div class="chapter" data-chapter="0"><div class="loading"></div></div>
+        <div class="chapter" data-chapter="1"><div class="loading">Loading Chapter</div></div>
+        <div class="chapter" data-chapter="2"><div class="loading">Loading Chapter</div></div>
+        <div class="chapter" data-chapter="3"><div class="loading">Loading Chapter</div></div>
+        <div class="chapter" data-chapter="4"><div class="loading">Loading Chapter</div></div>
+        <div class="chapter" data-chapter="5"><div class="loading">Loading Chapter</div></div>
+      </div>
+    </div>
+
+    <div class="right-column"></div>
+  </body>
+</html>

@@ -1,0 +1,39 @@
+<div>
+  <h2>Text Analysis</h2>
+  <p class="subhead">
+    In addition to purely instrumental pieces, our dataset includes a number of compositions for one or more voices accompanied by a lute, and sometimes other instruments. Fortunately for us, Gerbode has transcribed not only the music but also the lyrics for many of these works. MIDI files are capable of storing lyrics in designated text events, which enables us to use programming libraries like <a href="https://craffel.github.io/pretty-midi/" target="_blank">pretty_midi</a> to process the files and collect the lyrics. Using this method, I gathered the lyrics of over 400 English lute songs. The most prominent composers in this collection are Thomas Campion, with over 120 compositions, and John Dowland, with just over 100. Besides the English songs, there is a comparable number of French airs de cour, psalms, and other compositions, most of which appear to come from a single source: Gabriel Bataille’s multi-volume collection <a href="https://gallica.bnf.fr/ark:/12148/btv1b85722098" target="_blank">Airs de différents auteurs</a>. Some Italian and German texts are also included, though in much smaller quantities.</p>
+  <p>
+    The word cloud below displays the most common words found in the lyrics and should give you a first taste of their semantic flavor. Font size corresponds roughly to their relative frequency. You can switch between English and French songs.
+  </p>
+  <button class="section-button" onclick="generateWordCloud('wordsEn.json')">English</button>
+  <button class="section-button" onclick="generateWordCloud('wordsFr.json')">French</button>
+  <div id="word-cloud"></div>
+  <p>
+    Texts–and poetic ones such as our lyrics in particular–are a classic candidate for qualitative analysis, where a researcher combines a careful reading of the text with their knowledge of the surrounding context to interpret the work with respect to a specific research question. This does not mean, however, that text data is inaccessible to quantitative methods. Natural language processing is a rapidly growing field, and while it is best known for its recent advances in generative modeling, it also provides a range of practical techniques for analyzing large corpora of text.
+  </p>
+
+  <p class="section-break">* * *</p>
+
+  <p>
+    One such technique is sentiment analysis, which aims at detecting emotions in text. It is widely used by companies to evaluate customer feedback, but also finds applications in the humanities and social sciences. In musicology, for example, sentiment analysis <a href="https://online.ucpress.edu/jpms/article-abstract/30/4/161/106385/Quantitative-Sentiment-Analysis-of-Lyrics-in" target="_blank">has been applied</a> to study how the emotions expressed in popular music lyrics have shifted since the 1950s. The research shows a clear trend toward more negative language, with sentiments like fear and sadness increasing, while positive emotions have declined. In the remainder of this section, we will perform a sentiment analysis on the lyrics of the English lute songs in our dataset. Lacking an actual musicological research question, we will test the simple toy hypothesis that the sentiments in songs written in minor keys differ from those in major keys.
+  </p>
+  <p>
+    For the analysis, I used a <a href="https://huggingface.co/j-hartmann/emotion-english-distilroberta-base" target="_blank">pretrained model</a> from the Hugging Face model library, which assigns scores between 0 and 1 for the following sentiments: anger, disgust, fear, joy, neutral, sadness, and surprise. While I tried to select a model that has been trained on a diverse set of text data, it's important to recognize that its accuracy when applied to 16th-century poetry may be limited. It still yields reasonable results. For example, consider the famous song “Now o Now I Needs Must Part” from John Dowland’s <a href="https://archive.org/details/firstbookeofsong00dowl/page/n21/mode/2up" target="_blank">First Booke of Songes or Ayres</a>, which explores the themes of deep despair and enduring love in the face of separation. The model correctly identifies it as a sad song, assigning a sadness score of 0.98, while the other sentiments receive scores orders of magnitude smaller.
+  </p>
+  <div class="image-container">
+    <img src="images/general/now_o_now.png" alt="Hans Newsidler's Ein gut Preabmel in German lute tablature"/>
+  </div>
+
+  <p class="section-break">* * *</p>
+
+  <p>
+    Inspecting the predictions of our model, it gets clear that sadness is the dominant emotion in the text corpus. Some songs receive high values in other sentiments. For example, Thomas Campion’s <a href="https://imslp.org/wiki/Masque_in_Honour_of_the_Marriage_of_Lord_Hayes_(Campion,_Thomas)" target="_blank">“Triumph Now With Joy And Mirth”</a> is classified as joyful, as the title would suggest. But these are relatively few compared to the many songs with high sadness scores. To test our hypothesis about the difference between minor and major songs, we will check whether minor-key songs, on average, have higher sadness scores than those in major keys. The upper half of the following chart displays the distributions of sadness scores for minor and major songs.
+  </p>
+  <div class="plot" data-plot-url="sentiment_plot.json" style="width: 70%"></div>
+  <p>
+    The distributions have a tendency to concentrate near the minimum and maximum values, indicating that the model often makes strong, confident predictions rather than uncertain ones. As predicted by our hypothesis, the distribution for minor-key songs has, in relative terms, a greater concentration of high sadness scores, with more mass near a score of 1. This observation is confirmed by statistical analysis. Since the data deviates strongly from normality, I performed a Mann–Whitney U test as a non-parametric alternative to a two-sample t-test. The results indicated a statistically significant difference between the groups, U = 15,876, p < .001, with minor songs (n = 244, median = 0.23) having higher sadness scores than major songs (n = 172, median = 0.08).
+  </p>
+  <p>
+    The lower half of the chart compares the mean sadness scores of songs by different composers. The large confidence intervals are due to the small sample sizes we have for most composers, with the exceptions of John Dowland and Thomas Campion. For these two composers, there is a clear difference in sadness scores, and we could easily obtain a statistically significant result. However, conducting an analysis in this way—searching for significant results and then forming a post hoc hypothesis—is considered bad practice, as it drastically increases the risk of false positives. If we had entered the analysis with a clear hypothesis about stylistic differences in the lyrics used by these composers, this would have been another opportunity to apply statistical testing to a musicological question.
+  </p>
+</div>

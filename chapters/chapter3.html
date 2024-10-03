@@ -1,0 +1,64 @@
+<div>
+  <h2>MIDI Data</h2>
+  <p class="subhead">
+    The most exciting part of our dataset is the large collection of MIDI files. Unlike traditional audio formats, which store sound frequencies, MIDI represents music symbolically by describing a sequence of musical events, such as note onsets or tempo changes, and their properties. This makes it easy to extract and modify musical information. For instance, we can create aggregate features which summarize the information in a MIDI file into single values that describe some musical dimension of the piece. A simple example is the musical range of a piece, which can be calculated by subtracting the lowest from the highest pitch in the MIDI. But we can also derive more complicated features such as the frequency at which certain chords or cadences occur. To extract these features efficiently, I used <a href="https://jmir.sourceforge.net/jSymbolic.html" target="_blank">jSymbolic</a>, a software application that comes with a wide variety of predefined features and makes it convenient to select features of interest and batch process a collection of files.
+  </p>
+  <p>
+    To illustrate the use of MIDI features, let’s consider a simple example. In the chart below, each datapoint represents a single composition from our dataset, focusing on those written for solo Renaissance lute. The x-position and color indicate the date of publication and instrumentation respectively, both of which are specified in the metadata. The y-axis displays the musical range of each piece, which is an aggregate feature derived from the MIDI. For better visualization, the data is sampled, and a small amount of uniform noise has been added.
+  </p>
+  <div class="plot" data-plot-url="range_year_scatterplot.json"></div>
+  <p>
+    While we observe significant variability in range across the pieces, the distribution is pretty consistent throughout most of the 16th century. It is only towards the very end of the century, that instruments with additional bass courses gained popularity and the expected range of compositions experienced a sudden and noticeable increase. To better see the connection between instrumentation and range, try isolating the data points for 6-course compositions by double-clicking the corresponding legend entry, and gradually reintroduce the remaining instruments by single-clicking their entries. This observation is, of course, not too surprising, but it is nevertheless interesting to see how a historical trend in instrument building becomes visible in quantifiable properties of musical compositions.
+  </p>
+
+  <p class="section-break">* * *</p>
+
+  <p>
+    In the remainder of this section, we will use extracted MIDI features to compare the compositional styles of two prominent early Renaissance lutenists: Francesco da Milano and Hans Newsidler. Specifically, we will fit a logistic regression model to distinguish between pieces composed by da Milano and Newsidler based on selected musical features. Logistic regression predicts the probability that a sample belongs to a particular category by modeling a linear relationship between the sample's features and the log-odds of that category. To illustrate how certain musical features might help predict composership, consider the feature distributions in the chart below.
+  </p>
+  <div class="plot" data-plot-url="musical_features_by_comp.json"></div>
+  <p>
+    The <i>Importance of Bass Register</i> feature, shown on the left, measures the fraction of notes below G3. When we compare its conditional distributions for da Milano and Newsidler, we find they are very similar. Both are centered around nearly identical means, and although the Newsidler distribution has slightly higher variance, this is not the kind of difference that can be modeled in logistic regression, because it relies on a linear relationship between the feature and log-odds. Things are different with the <i>Vertical Tritones</i> feature on the right, which measures the fraction of vertical intervals that are tritones (weighted by their duration). The distribution for da Milano is noticeably shifted to the right. In other words, the more tritones there are in a piece, the more likely it is composed by da Milano and not Newsidler. This feature has some explanatory value for distinguishing between the two composers and its influence can be modeled as a linear relationship.
+  </p>
+
+  <p class="section-break">* * *</p>
+
+  <p>
+    The most extreme outlier is a piece titled “Ein gut Preambel.” It comes from Hans Newsidler’s 1536 collection <a href="https://imslp.org/wiki/Ein_newgeordent_k%C3%BCnstlich_Lautenbuch_(Neusiedler%2C_Hans)" target="_blank">Ein Newgeordent Künstlich Lautenbuch</a>, which is divided into two parts: the first for beginners (“für die anfahenden Schuler”), and the second featuring more complex and advanced compositions. Our piece belongs to the first part, and like other pieces in this section, it is relatively short and simple. As you can see above, large sections of the piece contain only a single voice. In such a brief and sparsely polyphonic work, even a few long-held tritones can significantly impact the feature calculation, leading to the outliers we noticed in the distribution.
+  </p>
+  <div class="image-container">
+    <img src="images/general/ein_gut_preambel.png" alt="Hans Newsidler's Ein gut Preabmel in German lute tablature"/>
+  </div>
+  <p>
+    The last four bars of the piece feature a harmonic sequence where a short figure is repeated in different keys, connected by a brief scale.
+  </p>
+  <div class="image-container">
+    <img src="images/general/preambel_modern_notation.png" alt="Final bars of Newsidler's Ein gut Preambel in modern notation."/>
+  </div>
+  <p>
+    While traditional harmonic analysis may not fully apply to music of this period, we can still describe the figure in general terms. In both iterations, a suspension resolves into a long-held chord that has a dominant-like function and eventually leads to a tonic. Without imposing an anachronistic harmonic classification, we can note that these dominant-like chords contain a diminished fifth, which accounts for the piece's high value in the <i>Vertical Tritones</i> feature.
+  </p>
+
+  <p class="section-break">* * *</p>
+
+  <p>
+    A crucial step in regression analysis is deciding which features to include. This choice is typically guided by a specific research question and usually involves a small selection of factors for which there is a hypothesis, along with potential confounding variables the analyst wants to control for. Since I don’t have an actual hypothesis, I selected a small number of features that met the linearity assumption and collectively provide an informative description of the compositions’ harmonic and rhythmic structure.
+  </p>
+  <ul>
+    <li>The presence of time signature changes.</li>
+    <li>The number of distinct rhythmic values that appear at least once in the piece (rhythmic variability).</li>
+    <li>The average number of note onsets per quarter beat (density).</li>
+    <li>The <i>Vertical Tritones</i> feature (as proxy for dissonance).</li>
+    <li>The range, which indicates whether the composer utilizes the full low and high registers available.</li>
+    <li>The number of unique pitches (with octaves counted as the same pitch), which should increase with the harmonic complexity of the composition.</li>
+  </ul>
+  <p>
+    The upcoming chart contains the results of the regression. It shows the odds ratios for each feature, which represent the change in the odds of a piece being composed by da Milano rather than Newsidler, given a one-unit increase in that feature, with all else held constant. An odds ratio greater than 1 suggests that the feature increases the likelihood of a piece being by da Milano, while an odds ratio less than 1 suggests the opposite. The confidence intervals represent the range within which the true odds ratio is likely to fall and indicate whether the finding is statistically significant.
+  </p>
+  <div class="plot" data-plot-url="regression_results.json" style="width: 80%"></div>
+  <p>
+    The dashed gray line represents neutral odds (1:1). The blue feature coefficients to the left of this line indicate that the feature increases the likelihood that a piece was composed by Hans Newsidler, while red coefficients on the right belong to features that are more characteristic of Francesco da Milano. According to our model, time signature changes and higher note density are typical of Newsidler’s compositions. In contrast, greater rhythmic variety, more tritones, and a wider range are more commonly found in da Milano’s music. The <i>Number of Pitch Classes</i> feature did not reach statistical significance, as its confidence intervals include the neutral odds of 1.</p>
+  <p>
+    We can also provide more precise numerical interpretations for these coefficients. Note here that the plot uses a logarithmic scale. For instance, the coefficient for <i>Time Signature Change</i> suggests that, controlling for all other features, the presence of a time signature change reduces the odds of a piece being composed by da Milano (as opposed to Newsidler) by a factor of 0.1. Similarly, increasing the range by one half step raises the odds that the piece was composed by da Milano by a factor of 1.77, assuming all other factors remain constant. The other coefficients can be interpreted in the same way.
+  </p>
+</div>

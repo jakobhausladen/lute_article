@@ -1,0 +1,41 @@
+<div>
+  <h2>Composer Data</h2>
+  <p class="subhead">
+    Let us begin by taking a closer look at the composers in our dataset. If we gather all composer names from the metadata and exclude those that only provide initials or incomplete information, we end up with a list of about 550 unique names. To explore who these composers were and gain insight into the historical context in which lute music was composed, I have collected further data from two independent online databases: <a href="https://musicalics.com" target="_blank">Musicalics</a> and <a href="https://composers-classical-music.com" target="_blank">Composers-Classical-Music</a>, which both provide information on the date, country and place of birth and death for a large number of composers. Since these two sites do not provide a public API, I used the web scraping library <a href="https://scrapy.org" target="_blank">Scrapy</a> to crawl the websites and extract the relevant information. This way, I was able to collect data for a considerable number of composers: the lowest number of matches was 170 for the country of death, the best was 331 for the date of death.
+  </p>
+  <p>
+    With this data, we can begin to explore temporal and regional patterns in the history of the lute and its music. Let’s focus on Renaissance composers and the timeframe between late 15th and the early 17th century. The majority of composers during this period came from Italy, England, France, or Germany. To estimate when these composers were actively composing and publishing, I defined their “active year” as the midpoint between their birth and death dates. By plotting the cumulative number of composers active before a certain year for each of these four nationalities, we can visualize country-level differences in musical developments.
+  </p>
+  <div class="plot" style="width: 85%" data-plot-url="composer_nationality_lineplot.json"></div>
+  <p>
+    Over the period as a whole, Italy clearly has the highest number of composers, followed by England, while France and Germany trail behind. For all countries, the growth in the number of new composers begins to slow in the early 1600s, with Italy experiencing this decline even earlier. This does not necessarily reflect a real historical trend though, but is partly due to the dataset's focus on the Renaissance period.
+  </p>
+  <p>
+    Until this point, the growth in France and Germany is approximately linear, meaning that the number of active composers remained relatively constant. In Italy and England we see a more sudden and rapid increase in new composers—beginning in the 1540s for Italy and around 50 years later, in the 1590s, for England. This suggests that Italy and England were important centers of musical innovation during these periods, and emphasizes the significance of regional differences in the history of the lute and its music.
+  </p>
+
+  <p class="section-break">* * *</p>
+
+  <p>
+    It might be interesting to place some individual composers in this context. The following chart shows a timeline of composers, grouped by nationality. In the background, decades are represented as bubbles, the size of which is proportional to the number of composers whose active year falls in that decade. Larger bubbles thus indicate periods of greater musical activity.
+  </p>
+  <div class="plot" data-plot-url="timeline_bubble_chart.json"></div>
+  <p>
+    What stands out here is the presence of families. For example, we see the renowned English lutenist John Dowland and his son Robert Dowland, who was also a composer and published many of his father's works. In Italy, we find the Galilei family, which produced not only the famous astronomer Galileo Galilei, but also notable musicians such as Galileo's father Vincenzo and his brother Michelagnolo. On the German timeline, Hans Newsidler appears with his sons Melchior and Conrad. Finally, there is an international family with Alfonso Ferrabosco the Elder, an Italian composer, and his son Alfonso Ferrabosco the Younger, who was born in England during his father’s service at the court of Elizabeth I and remained there throughout his life. This illustrates how music as an art and a business was often passed down in families, with children learning the craft from the previous generation and sometimes inheriting positions or employment opportunities.
+  </p>
+
+  <p class="section-break">* * *</p>
+
+  <p>
+    So far, we have considered regional differences at the country level. However, for many composers, our data provides more detailed information through their places of birth and death. The data shows, for instance, that the most significant cities in terms of recorded births and deaths are London and Paris, followed by Rome, Venice, and Florence. We also find a general trend of composers migrating from smaller towns to major cultural centers. Thus, 52% of composers were born in towns which have no records of other composers being born there. But only 29% died in a town with now other recorded deaths. This effect is to be expected, as people typically move to culturally flourishing hubs for education or employment.
+  </p>
+  <p>
+    We can also visualize the data by using the reverse search of a <a href="https://positionstack.com" target="_blank">geocoding API</a> to obtain the towns' coordinates and plotting them on a map. Below, each town is represented by a bubble that increases in size with the recorded number of births and deaths–that is, with each mention of a composer’s presence in that town. Play the animation to see how the regional pattern evolves over time.</p>
+  <div class="plot" data-plot-url="bubble_map.json"></div>
+  <p>
+    Initially, much of the development occurs around northern France, Belgium, and the Netherlands. This trend continues until the 1540s and shows the influence of towns like Antwerp, which was a center of publishing and cultural activity during the early Renaissance. It also highlights the importance of the Franco-Flemish School, which included composers such as Guillaume Dufay, Josquin Desprez, and Orlando di Lasso, whose music served as material for lute compositions and was published and distributed as intabulations and lute songs. From around the 1520s onwards, the northern Italian towns and republics begin to flourish and establish themselves as centers of musical activity. Starting in the 1560s, London and Paris experience rapid growth, continuing until the end of the period and making them the towns with the most composers by a significant margin. Finally, Rome rises in importance and forms a counterbalance to its northern Italian neighbors.
+  </p>
+  <p>
+    By clicking the legend entries, you can display how composers migrated to and from the major musical centers. These centers mostly recruited from within their own countries–an exception here, shown when you click on London, is Augustine Bassano, a Venetian lute player and composer employed at the English court; one of his pieces can be found in the <a href="https://cudl.lib.cam.ac.uk/view/MS-DD-00002-00011/1" target="_blank">Matthew Holmes lute books</a>. This doesn’t mean there was no international exchange. The migration lines are based solely on places of birth and death, without accounting for temporary residences. Even so, according to our data, 75% of composers didn’t die in the town where they were born, and 31% didn’t die in their country of birth. These figures are remarkably high and show that lutenists and composers were part of a highly mobile cultural elite, or whom finding an employer often meant relocating.
+  </p>
+</div>
